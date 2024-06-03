@@ -15,18 +15,20 @@ let  posts = [
 app.get("/api/posts", (req, res) => {
     const limit = Number(req.query.limit);
     if(!isNaN(limit) && limit > 0) {
-        res.json(posts.slice(0, limit));
-    } else {
-        res.json(posts);
-    }
-    
+        return res.status(200).json(posts.slice(0, limit));
+    } 
+    res.status(200).json(posts);
 });
 
 // get one postr by id
 app.get("/api/post/:id", (req, res, next) => {
     const id = Number(req.params.id);
-    res.json(posts.filter((post) => post.id === id));
-})
+    const post = posts.find((post) => post.id === id);
+    if(!post) {
+        return res.status(404).json( { msg: ` A post with the id of ${id} was not found`});
+    } 
+    res.status(200).json(post);
+});
 
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
