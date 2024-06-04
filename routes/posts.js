@@ -8,6 +8,8 @@ let  posts = [
     {id: 4, title: "post four"}
 ];
 
+
+
 router.get("/", (req, res) => {
     const limit = Number(req.query.limit);
     if(!isNaN(limit) && limit > 0) {
@@ -21,7 +23,9 @@ router.get("/:id", (req, res, next) => {
     const id = Number(req.params.id);
     const post = posts.find((post) => post.id === id);
     if(!post) {
-        return res.status(404).json( { msg: ` A post with the id of ${id} was not found`});
+        const error = new Error(` A post with the id of ${id} was not found`);
+        error.status = 404;
+        return next(error);
     } 
     res.status(200).json(post);
 });
@@ -59,7 +63,7 @@ router.delete("/:id", (req, res) => {
     }
     posts = posts.filter((post) => post.id !== id);
     res.status(200).json(posts);
-})
+});
 
 export default router;
 
