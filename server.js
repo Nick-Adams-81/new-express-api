@@ -5,6 +5,10 @@ import posts from "./routes/posts.js";
 const app = express();
 const port = process.env.PORT || 8000;
 
+// Body parser middleware
+app.use(express.json());
+app.use(express.urlencoded( { extended: false }));
+
 // set up static folder
 // app.use(express.static(path.join(__dirname, "public")));
 
